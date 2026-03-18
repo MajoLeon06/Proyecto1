@@ -2,9 +2,20 @@
 {
     Console.WriteLine("MENÚ\n1:Evaluar nuevo contenido\n2:Mostrar reglas del sistema\n3:Mostrar estadísticas de la sesión\n4:Reiniciar estadísticas\n5:Salir");
 }
+int option = 0;
 int optiontipo = 0;
 double duracion = 0;
 int optionhora = 0;
+int ingresos = 0;
+int opnivel = 0;
+int publicados = 0; //contador
+int rechazados = 0;//contador
+int revision = 0;//contador
+int imalto = 0;//contador impacto
+int immedio = 0;//contador impacto
+int imbajo = 0;//contador impacto
+int impactomayor = 0;
+bool correcto;
 string TipoContenido()
 {
     Console.WriteLine("OPCIONES:\n1:Película\n2:Serie\n3:Documental\n4:Evento en vivo");
@@ -52,6 +63,7 @@ string ClasificacionHora()
         {
             return "No válido";
         }
+        string production = Produccion(optionhora);
     }
     else
     {
@@ -59,7 +71,6 @@ string ClasificacionHora()
     }
     
 }
-int opnivel = 0;
 string Produccion(int optionhora)
 {
     Console.WriteLine("Ingrese nivel de producción:\n1:Bajo\n2:Medio\n3:Alto");
@@ -73,21 +84,24 @@ string Produccion(int optionhora)
         return "No válido";
     }
 }
-int ingresos;
 
-    bool correcto;
+do
+{
+    MostrarMenu();
     do
     {
-        Console.WriteLine("Ingrese la cantidad de contenido a evaluar:");
-        correcto = int.TryParse(Console.ReadLine(), out ingresos);
-        if (!correcto)
+        Console.WriteLine("Ingresar opción:");
+        correcto = int.TryParse(Console.ReadLine(), out option);
+        if(!correcto)
         {
-            Console.WriteLine("Dato no permitido... intente nuevamente");
+            Console.WriteLine("Opción no válida... intente nuevamente");
         }
     } while (!correcto);
-    for(int i=0; i<=ingresos; i++)
+    switch (option)
     {
-        string tipo = TipoContenido();
-        string hora= ClasificacionHora();
-        string prod = Produccion(optionhora);
+        case 1:
+            TipoContenido();
+            ClasificacionHora();
+            break;
     }
+} while (option!=6);
