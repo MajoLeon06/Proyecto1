@@ -73,3 +73,21 @@ string Produccion(int optionhora)
         return "No válido";
     }
 }
+int ingresos;
+
+    bool correcto;
+    do
+    {
+        Console.WriteLine("Ingrese la cantidad de contenido a evaluar:");
+        correcto = int.TryParse(Console.ReadLine(), out ingresos);
+        if (!correcto)
+        {
+            Console.WriteLine("Dato no permitido... intente nuevamente");
+        }
+    } while (!correcto);
+    for(int i=0; i<=ingresos; i++)
+    {
+        string tipo = TipoContenido();
+        string hora= ClasificacionHora();
+        string prod = Produccion(optionhora);
+    }
