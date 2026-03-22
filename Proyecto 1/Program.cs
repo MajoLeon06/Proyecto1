@@ -56,5 +56,50 @@ int IngresarDatos()
             Console.WriteLine("Dato no válido... intente nuevamente");
         }
     } while (!horacorrecta || hora < 0 || hora > 23);
-    
+    do
+    {
+        Console.WriteLine("Ingrese el nivel de producción:\n 1:Bajo\n 2:Medio\n 3:Alto");
+        produccioncorrecta = int.TryParse(Console.ReadLine(), out produccion);
+        if (!produccioncorrecta || produccion < 1 || produccion > 3)
+        {
+            Console.WriteLine("Dato no válido... intente nuevamente");
+        }
+    } while (!produccioncorrecta || produccion < 1 || produccion > 3);
+    if ((contenido==1 && duracion>=60 && duracion<=180) || (contenido==2 && duracion>=20 && duracion<=90) || (contenido==3 && duracion>=30 && duracion<=120) || (contenido==4 && duracion>=30 && duracion<=240))
+    {
+        if((clasificacion==1) || (clasificacion==2 && hora>=6 && hora<=22) || (clasificacion==3 && hora<=5 && hora>=22))
+        {
+            Console.WriteLine("Publicar");
+            publicados++;
+        }
+        else
+        {
+            Console.WriteLine("Revisar el contenido");
+            revision++;
+        }
+    }
+    else
+    {
+        Console.WriteLine("Rechazado, no publicar");
+        rechazados++;
+    }
+}
+int Impacto()
+{
+    if(produccion==3 || duracion>120 || (hora>=20 && hora<=23))
+    {
+        return 1; //impacto alto
+        alto++;
+    }
+    else if (produccion==2 || (duracion>=60 && duracion<=120))
+    {
+        return 2; //impacto medio
+        medio++;
+    }
+    else if (produccion==1 || duracion<60)
+    {
+        return 3; //impacto bajo
+        bajo++;
+    }
+    return 0;
 }
