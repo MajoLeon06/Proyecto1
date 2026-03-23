@@ -21,6 +21,7 @@ int impactomayor = 0;
 double aprobados;
 int cantidad = 0;
 bool cantidadcorrecta;
+string mayorimpacto;
 void IngresarDatos()
 {
     do
@@ -71,7 +72,28 @@ void IngresarDatos()
     if ((contenido==1 && duracion>=60 && duracion<=180) || (contenido==2 && duracion>=20 && duracion<=90) || (contenido==3 && duracion>=30 && duracion<=120) || (contenido==4 && duracion>=30 && duracion<=240))
     {
         int impacto = Impacto();
-        if((clasificacion==1) || (clasificacion==2 && hora>=6 && hora<=22) || (clasificacion==3 && hora<=5 && hora>=22) && (impacto==2 || impacto==1))
+        if(impacto==1)
+        {
+            Console.WriteLine("Impacto alto");
+            alto++;
+        }
+        else if(impacto==2)
+        {
+            Console.WriteLine("Impacto medio");
+            medio++;
+        }
+        else if (impacto==3)
+        {
+            Console.WriteLine("Impacto bajo");
+            bajo++;
+        }
+        mayorimpacto = ImpactoMayor(bajo, medio, alto);
+        if(impacto==1)
+        {
+            Console.WriteLine("Enviar a revisión por impacto alto");
+            revision++;
+        }
+        if ((clasificacion==1) || (clasificacion==2 && hora>=6 && hora<=22) || (clasificacion==3 && hora<=5 && hora>=22) && (impacto==2 || impacto==1))
         {
             Console.WriteLine("Publicar: cumple todas las reglas");
             publicados++;
@@ -92,6 +114,46 @@ void IngresarDatos()
         Console.WriteLine("Rechazado, no publicar por incumplir una regla técnica obligatoria");
         rechazados++;
     }
+}
+string ImpactoMayor(int bajo, int medio, int alto)
+{
+    if(bajo>medio)
+    {
+        impactomayor = bajo;
+    }
+    else if(medio>bajo)
+    {
+        impactomayor = medio;
+    }
+    else if(medio>alto)
+    {
+        impactomayor = medio;
+    }
+    else if(alto>medio)
+    {
+        impactomayor = alto;
+    }
+    else if(alto>bajo)
+    {
+        impactomayor = alto;
+    }
+    else if(bajo>alto)
+    {
+        impactomayor = bajo;
+    }
+    if (impactomayor == bajo)
+    {
+        return "Impacto bajo";
+    }
+    else if (impactomayor == medio)
+    {
+        return "Impacto medio";
+    }
+    else if (impactomayor==alto)
+    {
+        return "Impacto alto";
+    }
+    return "";
 }
 int Impacto()
 {
@@ -122,7 +184,14 @@ do
         case 1:
             Console.Write("Ingrese la cantidad de contenido que desea evaluar:");
             cantidadcorrecta = int.TryParse(Console.ReadLine(), out cantidad);
-            IngresarDatos();
+            for (int i=1; i<=cantidad; i++)
+            {
+                Console.Clear();
+                IngresarDatos();
+                ImpactoMayor(bajo, medio, alto);
+                Console.ReadKey();
+            }
+            evaluados = evaluados + cantidad;
             break;
         case 2:
             Console.WriteLine("REGLAS DE CLASIFICACIÓN Y HORARIO");
@@ -143,7 +212,8 @@ do
             Console.WriteLine($"Publicados: {publicados}");
             Console.WriteLine($"Rechazados: {rechazados}");
             Console.WriteLine($"En revisión: {revision}");
-            Console.WriteLine($"Impacto predominante: {impactomayor}");
+            string funcion = ImpactoMayor(bajo, medio, alto);
+            Console.WriteLine($"Impacto predominante: {funcion}");
             Console.WriteLine($"Porcentaje de aprobación:");
             break;
         case 4:
