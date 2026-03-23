@@ -1,4 +1,5 @@
 ﻿int option;
+bool optioncorrecta;
 int contenido;
 bool contenidocorrecto;
 double duracion;
@@ -7,18 +8,20 @@ int clasificacion;
 bool clasificacioncorrecta;
 int hora;
 bool horacorrecta;
-int produccion;
+int produccion = 0;
 bool produccioncorrecta;
-int evaluados; //contador total
-int publicados; //contador
-int rechazados; //contador
-int revision; //contador
-int alto; //contador impacto
-int medio; //contador impacto
-int bajo; //contador impacto
+int evaluados=0; //contador total
+int publicados=0; //contador
+int rechazados=0; //contador
+int revision = 0; //contador
+int alto = 0; //contador impacto
+int medio = 0; //contador impacto
+int bajo = 0; //contador impacto
 int impactomayor = 0;
 double aprobados;
-int IngresarDatos()
+int cantidad = 0;
+bool cantidadcorrecta;
+void IngresarDatos()
 {
     do
     {
@@ -67,20 +70,26 @@ int IngresarDatos()
     } while (!produccioncorrecta || produccion < 1 || produccion > 3);
     if ((contenido==1 && duracion>=60 && duracion<=180) || (contenido==2 && duracion>=20 && duracion<=90) || (contenido==3 && duracion>=30 && duracion<=120) || (contenido==4 && duracion>=30 && duracion<=240))
     {
-        if((clasificacion==1) || (clasificacion==2 && hora>=6 && hora<=22) || (clasificacion==3 && hora<=5 && hora>=22))
+        int impacto = Impacto();
+        if((clasificacion==1) || (clasificacion==2 && hora>=6 && hora<=22) || (clasificacion==3 && hora<=5 && hora>=22) && (impacto==2 || impacto==1))
         {
-            Console.WriteLine("Publicar");
+            Console.WriteLine("Publicar: cumple todas las reglas");
             publicados++;
+        }
+        else if(impacto==3)
+        {
+            Console.WriteLine("Enviar a revisión por impacto alto");
+            revision++;
         }
         else
         {
-            Console.WriteLine("Revisar el contenido");
-            revision++;
+            Console.WriteLine("Publicar con ajustes por modificaciones menores");
+            publicados++;
         }
     }
     else
     {
-        Console.WriteLine("Rechazado, no publicar");
+        Console.WriteLine("Rechazado, no publicar por incumplir una regla técnica obligatoria");
         rechazados++;
     }
 }
@@ -103,3 +112,64 @@ int Impacto()
     }
     return 0;
 }
+
+do
+{
+    Console.WriteLine("STREAMING\n--MENÚ--\n1:Evaluar nuevo contenido\n2:Mostrar reglas del sistema\n3:Mostrar estadísticas de la sesión\n4:Reiniciar estadísticas\n5:Salir");
+    optioncorrecta = int.TryParse(Console.ReadLine(), out option);
+        switch (option)
+    {
+        case 1:
+            Console.Write("Ingrese la cantidad de contenido que desea evaluar:");
+            cantidadcorrecta = int.TryParse(Console.ReadLine(), out cantidad);
+            IngresarDatos();
+            break;
+        case 2:
+            Console.WriteLine("REGLAS DE CLASIFICACIÓN Y HORARIO");
+            Console.WriteLine("- El contenido clasificado como Todo Público puede transmitirse en cualquier horario");
+            Console.WriteLine("- El contenido clasificado como +13 puede transmitirse entre 6 y 22 horas");
+            Console.WriteLine("- El contenido clasificado como +18 puede transmitirse entre 22 y 5 horas");
+            Console.WriteLine("REGLAS DE DURACIÓN POR TIPO (obligatorias)");
+            Console.WriteLine("- Las películas duran entre 60 y 180 minutos");
+            Console.WriteLine("- Las series duran entre 20 y 90 minutos");
+            Console.WriteLine("- Los documentales duran entre 30 y 120 minutos");
+            Console.WriteLine("- Los eventos en vivo duran entre 30 y 240 minutos");
+            Console.WriteLine("REGLAS DE PRODUCCIÓN");
+            Console.WriteLine("- La producción baja solo es válida para clasificación de Todo Público o +13");
+            Console.WriteLine("- La producción media o alta es válida para cualquier clasificación");
+            break;
+        case 3:
+            Console.WriteLine($"Total evaluados: {evaluados}");
+            Console.WriteLine($"Publicados: {publicados}");
+            Console.WriteLine($"Rechazados: {rechazados}");
+            Console.WriteLine($"En revisión: {revision}");
+            Console.WriteLine($"Impacto predominante: {impactomayor}");
+            Console.WriteLine($"Porcentaje de aprobación:");
+            break;
+        case 4:
+            evaluados = 0;
+            publicados = 0;
+            rechazados = 0;
+            revision = 0;
+            impactomayor = 0;
+            break;
+        case 5:
+            if(evaluados>0 || publicados>0 ||  rechazados>0 ||  impactomayor>0 || revision>0)
+            {
+                Console.WriteLine($"Total evaluados: {evaluados}");
+                Console.WriteLine($"Publicados: {publicados}");
+                Console.WriteLine($"Rechazados: {rechazados}");
+                Console.WriteLine($"En revisión: {revision}");
+                Console.WriteLine($"Impacto predominante: {impactomayor}");
+                Console.WriteLine($"Porcentaje de aprobación:");
+            }
+            else
+            {
+                Console.WriteLine("No hay datos disponibles");
+            }
+            break;
+        default:
+            Console.WriteLine("Opción no válida, intente nuevamente");
+            break;
+    }
+} while (option != 5);
