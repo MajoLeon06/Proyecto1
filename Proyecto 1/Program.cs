@@ -200,17 +200,30 @@ double Porcentaje(double aprobados, double evaluados)
 do
 {
     Console.Clear();
+    do {
     Console.Write("STREAMING\n--MENÚ--\n1:Evaluar nuevo contenido\n2:Mostrar reglas del sistema\n3:Mostrar estadísticas de la sesión\n4:Reiniciar estadísticas\n5:Salir\n");
-    Console.Write("Ingrese una opción:");
-    optioncorrecta = int.TryParse(Console.ReadLine(), out option);
+        Console.Write("Ingrese una opción:");
+        optioncorrecta = int.TryParse(Console.ReadLine(), out option);
+        if (!optioncorrecta)
+        {
+            Console.WriteLine("Dato no válido... intente nuevamente");
+        }
+    } while (!optioncorrecta);
     Console.ReadKey();
         switch (option)
     {
         case 1:
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Clear();
-            Console.Write("Ingrese la cantidad de contenido que desea evaluar:");
-            cantidadcorrecta = int.TryParse(Console.ReadLine(), out cantidad);
+            do
+            {
+                Console.Write("Ingrese la cantidad de contenido que desea evaluar:");
+                cantidadcorrecta = int.TryParse(Console.ReadLine(), out cantidad);
+                if(!cantidadcorrecta)
+                {
+                    Console.WriteLine("Dato no válido... intente nuevamente");
+                }
+            }while(!cantidadcorrecta);
             for (int i=1; i<=cantidad; i++)
             {
                 Console.Clear();
